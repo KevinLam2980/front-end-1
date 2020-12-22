@@ -52,20 +52,6 @@ const Recipes = (props) => {
 			});
 	}, [addRecipes]);
 
-	// 	return (
-	// 		<div className="recipes-container">
-	// 			<a href="/new">Add a New Recipe</a>
-	// 			<ul>
-	// 				{recipes.map((recipe) => (
-	// 					<ul className="recipe-cards">
-	// 						{recipe.name} // {recipe.category} // {recipe.source} <img src={recipe.imageURL} />
-	// 					</ul>
-	// 				))}
-	// 			</ul>
-	// 		</div>
-	// 	);
-	// };
-
 	return (
 		<div>
 			<NavBar />

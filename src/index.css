@@ -24,3 +24,7 @@ code {
   font-family: 'Merienda-Regular';
   src: local('Merienda-Regular'), url(./fonts/Merienda-Regular.ttf) format('truetype');
 }
+
+button:focus, button:active, input:active, input:focus {
+  outline: none;
+}

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import axiosWithAuth from "./util/axiosWithAuth";
 import { RecipeContext } from "./contexts/Context";
-
+import './index.css'
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Recipes from "./components/Recipes";

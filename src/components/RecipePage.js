@@ -5,6 +5,26 @@ import Styled from  'styled-components'
 import NavBar from './navBar'
 import video from '../assets/riceVid.mp4'
 
+const RecipesDiv = Styled.div`
+width: 100%;
+height: 100vh;
+#videoBG {
+            position: fixed;
+            z-index: -1;
+            height: 100vh;
+            width: 100%;
+            /* top: 0;
+            right: 0 !important;
+            left: 0 !important; */
+            padding: none;
+            overflow-x: hidden;
+            background-repeat: no-repeat;
+            /* background-size: cover; */
+            margin: 0;
+            padding: 0;
+        }
+`
+
 const RecipeSoloDiv = Styled.div`
     max-width: 500px;
     display: flex;
@@ -15,7 +35,7 @@ const RecipeSoloDiv = Styled.div`
     max-width: 500px;
     margin: 2rem auto;
     border-radius: 20px;
-    background-color: rgba(74, 198, 215, 0.7);
+    background-color: rgba(74, 198, 215, 0.9);
     box-sizing: border-box;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
     font-family: Poppins;
@@ -47,19 +67,6 @@ const RecipeSoloDiv = Styled.div`
     button:hover, a:hover{
         transform: scale(1.1);
     }
-    #videoBG {
-            position: fixed;
-            z-index: -1;
-            min-height: 50%;
-            max-height:100%;
-            min-width: 100%;
-            bottom: 0;
-            right: 0;
-            padding: none;
-            overflow-x: hidden;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
   #delete{
     background-color: #E81B23;
     box-shadow: 4px 4px 0px #FFD95C;
@@ -101,6 +108,7 @@ const RecipePage = () => {
         setRecipe(res.data.data)
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const deleteRecipe = (id) => {
@@ -112,7 +120,7 @@ const RecipePage = () => {
   }
 
   return (
-    <div>
+    <RecipesDiv>
     <NavBar />
     <RecipeSoloDiv>
       <div id='image-container'>
@@ -125,11 +133,11 @@ const RecipePage = () => {
       <ol>{instructions.map(instruction => <li>{instruction.instruction}</li>)}</ol>
       <Link to={`/editRecipe/${recipe.id}`}>Edit Recipe</Link>
       <button id='delete' onClick={() => deleteRecipe(recipe.id)}>Delete Recipe</button>
+    </RecipeSoloDiv>
       <video id='videoBG' poster='../src/assets/poster.png' autoPlay muted loop>
         <source src={video} type='video/mp4'/>
       </video>
-    </RecipeSoloDiv>
-    </div>
+    </RecipesDiv>
   )
 
 }

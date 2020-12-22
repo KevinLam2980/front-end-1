@@ -38,11 +38,9 @@ const postNewRecipe = (id) => {
       .then(res => {
         setRecipe([res.data, ...recipe])
         setFormValues('')
-        console.log(res.data)
       })
       .catch(err => {
         console.log(err)
-        debugger
       })
   }
 
@@ -52,6 +50,7 @@ const postNewRecipe = (id) => {
     .then(res => {
         setFormValues(res.data.data)
   })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onInputChange = (event) => {

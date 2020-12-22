@@ -45,12 +45,11 @@ const RecipeCard = (props) => {
     let tl = new TimelineLite()
     
     useEffect(() => {
-        // console.log(app)
         TweenMax.to(app, 0, {css: {visibility: 'visible'}})
         tl.from(app, 1.2, {y: 1280, ease: Power3.easeOut})
         .from(app, 2, {rotate:15, ease: Power3.easeOut}, .3)
         .from(app, 2, {scale:1.1, ease: Power3.easeOut}, .3)
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 	const { recipe } = props;
 	return (
