@@ -4,7 +4,7 @@ import video from '../assets/riceVid.mp4'
 import NavBar from './navBar'
 
 const RecipeForm = props => {
-const {formErrors, formValues, inputChange, postNewRecipe} = props
+const {formErrors, formValues, inputChange, postNewRecipe, disabled} = props
 
 const submit = evt => {
     evt.preventDefault()
@@ -87,7 +87,7 @@ const submit = evt => {
                         </select>
                     </label>
 
-                        <button onSubmit={submit} id='submitBtn'>Add Recipe</button>
+                        <button onSubmit={submit} disabled={disabled} id='submitBtn'>Add Recipe</button>
 
                 </form>
                 <video id='videoBG' poster='../src/assets/poster.png' autoPlay muted loop>

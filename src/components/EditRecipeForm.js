@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {useParams, useHistory} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 import ParentDiv from '../styles/recipeforms'
 import * as yup from 'yup'
 import newRecipe from '../validation/newRecipe'
@@ -21,12 +21,16 @@ const initialFormErrors = {
   imageURL: ''
 }
 
+const initialDisabled = false
+
 const EditRecipeForm = props => {
   const [formValues, setFormValues] = useState(initialFormValues)
   const [recipe, setRecipe] = useState([])
+  const [disabled, setDisabled] = useState(initialDisabled)
+  const [formErrors, setFormErrors] = useState(initialFormErrors)
+
   const params = useParams()
   const id = params.id
-  const [formErrors, setFormErrors] = useState(initialFormErrors) 
   const history = useHistory()
 
 
@@ -36,20 +40,20 @@ const EditRecipeForm = props => {
 
   useEffect(() => {
     axiosWithAuth()
-    .get(`/recipes/${id}`)
-    .then(res => {
+      .get(`/recipes/${id}`)
+      .then(res => {
         setFormValues(res.data.data)
-  })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const postNewRecipe = () => {
     axiosWithAuth()
-    .put(`/recipes/${id}`, formValues)
+      .put(`/recipes/${id}`, formValues)
       .then(res => {
         setRecipe([res.data, ...recipe])
-        setFormValues('')
-        console.log(res.data)
+        setFormValues(initialFormValues)
+        history.push('/recipes')
       })
       .catch(err => {
         console.log(err)
@@ -59,7 +63,8 @@ const EditRecipeForm = props => {
 
   const submit = evt => {
     evt.preventDefault()
-    const newRecipe = {
+    console.log(formValues)
+    let newRecipe = {
       name: formValues.name.trim(),
       source: formValues.source.trim(),
       category: formValues.category.trim(),
@@ -69,8 +74,7 @@ const EditRecipeForm = props => {
   }
 
   const onInputChange = (event) => {
-    const {name} = event.target
-    const {value} = event.target
+    const { name, value } = event.target
     yup
       .reach(newRecipe, name)
       .validate(value)
@@ -88,80 +92,86 @@ const EditRecipeForm = props => {
       })
     setFormValues({
       ...formValues,
-      [name]: value 
+      [name]: value
     })
   }
 
+  useEffect(() => {
+    newRecipe.isValid(formValues).then(valid => {
+      setDisabled(!valid)
+    })
+  }, [formValues])
+
   return (
     <ParentDiv>
-            <NavBar/>
-                <form onSubmit={submit}>
-                    <h2>Edit Your Recipe!</h2>
-                <div className='errors'>
-                    <div id='titleError'>{formErrors.name}</div>
-                </div>
-                    <label htmlFor='title'>
-                        <input
-                            type='text'
-                            name='name'
-                            value={formValues.name}
-                            onChange={onInputChange}
-                        ></input>
-                    </label>
-                    <div className='errors'>
-                    <div id='titleError'>{formErrors.source}</div>
-                </div>
-                    <label htmlFor='source'>
-                        <input
-                            type='text'
-                            name='source'
-                            value={formValues.source}
-                            placeholder={recipe.source}
-                            onChange={onInputChange}
-                        ></input>
-                    </label>
-                    <div className='errors'>
-                    <div id='titleError'>{formErrors.imageURL}</div>
-                </div>
-                    <label htmlFor='imgSRC'>
-                        <input
-                            type='text'
-                            name='imageURL'
-                            value={formValues.imageURL}
-                            placeholder={recipe.imageURL}
-                            onChange={onInputChange}
-                        ></input>
-                    </label>
-                    <div className='errors'>
-                    <div id='titleError'>{formErrors.category}</div>
-                </div>
-                    <label htmlFor='category'>
-                        <select
-                            onChange={onInputChange}
-                            value={formValues.category}
-                            name='category'
-                        >
-                            <option value='' >Food category</option>
-                            <option value='Pizza' >Pizza</option>
-                            <option value='Sandwich' >Sandwich</option>
-                            <option value='Pasta' >Pasta</option>
-                            <option value='Rice' >Rice</option>
-                            <option value='Meat' >Meat</option>
-                            <option value='Vegan' >Vegan</option>
-                            <option value='Festive' >Festive</option>
-                            <option value='Breakfast' >Breakfast</option>
-                            <option value='Lunch' >Lunch</option>
-                            <option value='Dinner' >Dinner</option>
-                            <option value='Snack' >Snack</option>
-                        </select>
-                    </label>
+      <NavBar />
+      <form onSubmit={submit}>
+        <h2>Edit Your Recipe!</h2>
+        <div className='errors'>
+          <div id='titleError'>{formErrors.name}</div>
+        </div>
+        <label htmlFor='title'>
+          <input
+            type='text'
+            name='name'
+            value={formValues.name}
+            onChange={onInputChange}
+          ></input>
+        </label>
+        <div className='errors'>
+          <div id='titleError'>{formErrors.source}</div>
+        </div>
+        <label htmlFor='source'>
+          <input
+            type='text'
+            name='source'
+            value={formValues.source}
+            placeholder={recipe.source}
+            onChange={onInputChange}
+          ></input>
+        </label>
+        <div className='errors'>
+          <div id='titleError'>{formErrors.imageURL}</div>
+        </div>
+        <label htmlFor='imgSRC'>
+          <input
+            type='text'
+            name='imageURL'
+            value={formValues.imageURL}
+            placeholder={recipe.imageURL}
+            onChange={onInputChange}
+          ></input>
+        </label>
+        <div className='errors'>
+          <div id='titleError'>{formErrors.category}</div>
+        </div>
+        <label htmlFor='category'>
+          <select
+            onChange={onInputChange}
+            value={formValues.category}
+            name='category'
+          >
+            <option value='' >Food category</option>
+            <option value='Pizza' >Pizza</option>
+            <option value='Sandwich' >Sandwich</option>
+            <option value='Pasta' >Pasta</option>
+            <option value='Rice' >Rice</option>
+            <option value='Meat' >Meat</option>
+            <option value='Vegan' >Vegan</option>
+            <option value='Festive' >Festive</option>
+            <option value='Breakfast' >Breakfast</option>
+            <option value='Lunch' >Lunch</option>
+            <option value='Dinner' >Dinner</option>
+            <option value='Snack' >Snack</option>
+          </select>
+        </label>
 
-                    <button onSubmit={submit} id='submitBtn'>Update Recipe</button>
-                    <button onClick={goHome} id='submitBtn'>Return to Recipes</button>
+        <button onSubmit={submit} id='submitBtn' disabled={disabled}>Update Recipe</button>
+        <button onClick={goHome} id='submitBtn'>Return to Recipes</button>
 
-                </form>
+      </form>
       <video id='videoBG' poster='../src/assets/poster.png' autoPlay muted loop>
-        <source src={video} type='video/mp4'/>
+        <source src={video} type='video/mp4' />
       </video>
     </ParentDiv>
   )

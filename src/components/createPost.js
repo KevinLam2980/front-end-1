@@ -17,7 +17,7 @@ const initialFormValues = {
     category: '',
     imageURL: ''
   }
-  const initialDisabled = true
+  const initialDisabled = false
 
 
 const CreatePost = (props) => {
